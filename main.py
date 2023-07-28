@@ -118,15 +118,14 @@ def write_header(f):
 
 def create_csv():
     csv_file1 = open(CSV_FNAME1, 'r')
-    #csv_file2 = open(CSV_FNAME2, 'r')
 
     foutput = open(CSV_OUTPUT, 'w')
     csv_reader1 = csv.reader(csv_file1, delimiter=FIELD_SEPARATOR)
-    #csv_reader2 = csv.reader(csv_file2, delimiter=FIELD_SEPARATOR)
     line_count = 0
     header = next(csv_reader1)  # store the headers and advance reader pointer
     write_header(foutput)
     start = datetime.datetime.now().replace(microsecond=0)
+    print("Start time: {}\n".format(start))
     for row in csv_reader1:
         #################################
         # EVENT_ID
