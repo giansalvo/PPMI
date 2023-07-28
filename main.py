@@ -2,6 +2,7 @@ import csv
 import datetime
 
 CSV_FNAME1 = "PPMI_Curated_Data_Cut_Public_20230612.csv"
+#CSV_FNAME1 = "small1.csv"
 CSV_FNAME2 = "Blood_Chemistry___Hematology_25Jul2023.csv"
 #CSV_FNAME2 = "small.csv"
 CSV_FNAME3 = "Olfactory_UPSIT-Archived_25Jul2023.csv"
@@ -15,10 +16,28 @@ FIELD1_N_SUBGROUP = 4
 FIELD1_N_EVENTID = 14
 FIELD1_N_AGE_VISIT = 18
 FIELD1_N_SEX = 19
+FIELD1_N_EDUCYRS = 20
 FIELD1_N_RACE = 22
+FIELD1_N_FAMPD = 27
+FIELD1_N_HANDED = 29
 FIELD1_N_BMI = 32
-FIELD1_N_MOCA = 52
+FIELD1_N_AGEDIAG = 33
+FIELD1_N_AGEONSET = 34
+FIELD1_N_DURATION = 35
+FIELD1_N_UPSITPCTL = 50
+FIELD1_N_MOCA = 51
+FIELD1_N_BJLOT = 52
+FIELD1_N_HVLT_DISCRIMINATION = 54
+FIELD1_N_SDMTOTAL = 63
+FIELD1_N_VLTANIM = 66
+FIELD1_N_MSEADLG = 69
+FIELD1_N_ESS = 79
+FIELD1_N_REM = 80
+FIELD1_N_STAI = 82
+FIELD1_N_SCOPA = 85
 FIELD1_N_NHY = 96
+FIELD1_N_UPDRS_TOT = 114
+FIELD1_N_TAU = 127
 
 # INPUT CODES 2
 FIELD2_N_PATNO = 0
@@ -39,10 +58,28 @@ def write_header(f):
     print(add_virgolette("subgroup"), file=f, end=FIELD_SEPARATOR)
     print(add_virgolette("age_at_visit"), file=f, end=FIELD_SEPARATOR)
     print(add_virgolette("sex"), file=f, end=FIELD_SEPARATOR)
+    print(add_virgolette("educyrs"), file=f, end=FIELD_SEPARATOR)
     print(add_virgolette("race"), file=f, end=FIELD_SEPARATOR)
+    print(add_virgolette("fampd"), file=f, end=FIELD_SEPARATOR)
+    print(add_virgolette("handed"), file=f, end=FIELD_SEPARATOR)
     print(add_virgolette("BMI"), file=f, end=FIELD_SEPARATOR)
+    print(add_virgolette("agediag"), file=f, end=FIELD_SEPARATOR)
+    print(add_virgolette("ageonset"), file=f, end=FIELD_SEPARATOR)
+    print(add_virgolette("duration"), file=f, end=FIELD_SEPARATOR)
+    print(add_virgolette("upsitpctl"), file=f, end=FIELD_SEPARATOR)
     print(add_virgolette("MOCA"), file=f, end=FIELD_SEPARATOR)
+    print(add_virgolette("bjlot"), file=f, end=FIELD_SEPARATOR)
+    print(add_virgolette("hvlt_discrimination"), file=f, end=FIELD_SEPARATOR)
+    print(add_virgolette("SMD_total"), file=f, end=FIELD_SEPARATOR)
+    print(add_virgolette("vltanim"), file=f, end=FIELD_SEPARATOR)
+    print(add_virgolette("mseadlg"), file=f, end=FIELD_SEPARATOR)
+    print(add_virgolette("ess"), file=f, end=FIELD_SEPARATOR)
+    print(add_virgolette("rem"), file=f, end=FIELD_SEPARATOR)
+    print(add_virgolette("STAI"), file=f, end=FIELD_SEPARATOR)
+    print(add_virgolette("SCOPA"), file=f, end=FIELD_SEPARATOR)
     print(add_virgolette("NHY"), file=f, end=FIELD_SEPARATOR)
+    print(add_virgolette("UPDRS_tot"), file=f, end=FIELD_SEPARATOR)
+    print(add_virgolette("TAU"), file=f, end=FIELD_SEPARATOR)
     print(add_virgolette("PATNO2"), file=f, end=FIELD_SEPARATOR)
     print(add_virgolette("RCT4"), file=f, end=FIELD_SEPARATOR)
     print(add_virgolette("CGT284"), file=f, end=FIELD_SEPARATOR)
@@ -113,10 +150,28 @@ def create_csv():
             age_at_visit = age_at_visit / 1000.0
         age_at_visit = str(age_at_visit)
         sex = row[FIELD1_N_SEX]
+        educyrs = row[FIELD1_N_EDUCYRS]
         race = row[FIELD1_N_RACE]
+        fampd = row[FIELD1_N_FAMPD]
+        handed = row[FIELD1_N_HANDED]
         bmi = row[FIELD1_N_BMI]
+        agediag = row[FIELD1_N_AGEDIAG]
+        ageonset = row[FIELD1_N_AGEONSET]
+        duration = row[FIELD1_N_DURATION]
+        upsitpctl = row[FIELD1_N_UPSITPCTL]
         moca = row[FIELD1_N_MOCA]
+        bjlot = row[FIELD1_N_BJLOT]
+        hvlt_discrimination = row[FIELD1_N_HVLT_DISCRIMINATION]
+        smd_total = row[FIELD1_N_SDMTOTAL]
+        vltanim = row[FIELD1_N_VLTANIM]
+        mseadlg = row[FIELD1_N_MSEADLG]
+        ess = row[FIELD1_N_ESS]
+        rem = row[FIELD1_N_REM]
+        stai = row[FIELD1_N_STAI]
+        scopa = row[FIELD1_N_SCOPA]
         nhy = row[FIELD1_N_NHY]
+        updrs_tot = row[FIELD1_N_UPDRS_TOT]
+        tau = row[FIELD1_N_TAU]
 
         #################################
         # SECOND FILE
@@ -124,39 +179,39 @@ def create_csv():
         csv_file2 = open(CSV_FNAME2, 'r')
         csv_reader2 = csv.reader(csv_file2, delimiter=FIELD_SEPARATOR)
         header = next(csv_reader2)  # store the headers and advance reader pointer
-        rct4 = -1
-        cgt284 = -1
-        rct5 = -1
-        rct13 = -1
-        rct1407 = -1
-        hmt12 = -1
-        hmt19 = -1
-        rct183 = -1
-        rct392 = -1
-        hmt11 = -1
-        hmt18 = -1
-        hmt2 = -1
-        hmt40 = -1
-        hmt9 = -1
-        hmt16 = -1
-        hmt10 = -1
-        hmt17 = -1
-        hmt8 = -1
-        hmt15 = -1
-        hmt13 = -1
-        cgt283 = -1
-        hmt3 = -1
-        hmt71 = -1
-        rct17 = -1
-        rct18 = -1
-        rct11 = -1
-        rct16 = -1
-        rct15 = -1
-        rct8 = -1
-        rct1 = -1
-        rct12 = -1
-        rct6 = -1
-        hmt7 = -1
+        rct4 = ""
+        cgt284 = ""
+        rct5 = ""
+        rct13 = ""
+        rct1407 = ""
+        hmt12 = ""
+        hmt19 = ""
+        rct183 = ""
+        rct392 = ""
+        hmt11 = ""
+        hmt18 = ""
+        hmt2 = ""
+        hmt40 = ""
+        hmt9 = ""
+        hmt16 = ""
+        hmt10 = ""
+        hmt17 = ""
+        hmt8 = ""
+        hmt15 = ""
+        hmt13 = ""
+        cgt283 = ""
+        hmt3 = ""
+        hmt71 = ""
+        rct17 = ""
+        rct18 = ""
+        rct11 = ""
+        rct16 = ""
+        rct15 = ""
+        rct8 = ""
+        rct1 = ""
+        rct12 = ""
+        rct6 = ""
+        hmt7 = ""
 
         found = False
         last_pat = -1
@@ -260,10 +315,28 @@ def create_csv():
         print(subgroup, end=FIELD_SEPARATOR, file=foutput)
         print(age_at_visit, end=FIELD_SEPARATOR, file=foutput)
         print(sex, end=FIELD_SEPARATOR, file=foutput)
+        print(educyrs, end=FIELD_SEPARATOR, file=foutput)
         print(race, end=FIELD_SEPARATOR, file=foutput)
+        print(fampd, end=FIELD_SEPARATOR, file=foutput)
+        print(handed, end=FIELD_SEPARATOR, file=foutput)
         print(bmi, end=FIELD_SEPARATOR, file=foutput)
+        print(agediag, end=FIELD_SEPARATOR, file=foutput)
+        print(ageonset, end=FIELD_SEPARATOR, file=foutput)
+        print(duration, end=FIELD_SEPARATOR, file=foutput)
+        print(upsitpctl, end=FIELD_SEPARATOR, file=foutput)
         print(moca, end=FIELD_SEPARATOR, file=foutput)
+        print(bjlot, end=FIELD_SEPARATOR, file=foutput)
+        print(hvlt_discrimination, end=FIELD_SEPARATOR, file=foutput)
+        print(smd_total, end=FIELD_SEPARATOR, file=foutput)
+        print(vltanim, end=FIELD_SEPARATOR, file=foutput)
+        print(mseadlg, end=FIELD_SEPARATOR, file=foutput)
+        print(ess, end=FIELD_SEPARATOR, file=foutput)
+        print(rem, end=FIELD_SEPARATOR, file=foutput)
+        print(stai, end=FIELD_SEPARATOR, file=foutput)
+        print(scopa, end=FIELD_SEPARATOR, file=foutput)
         print(nhy, end=FIELD_SEPARATOR, file=foutput)
+        print(updrs_tot, end=FIELD_SEPARATOR, file=foutput)
+        print(tau, end=FIELD_SEPARATOR, file=foutput)
 
 
         #################################
@@ -311,8 +384,8 @@ def create_csv():
         # csv_reader3 = csv.reader(csv_file3, delimiter=FIELD_SEPARATOR)
         # header = next(csv_reader3)  # store the headers and advance reader pointer
         # found = False
-        # upsiit_percentage = -1
-        # patno3 = -1
+        # upsiit_percentage = ""
+        # patno3 = ""
         # for row3 in csv_reader3:
         #     patno3 = row3[FIELD3_N_PATNO]
         #
