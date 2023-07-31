@@ -25,16 +25,16 @@ FIELD1_N_AGEDIAG = 33
 FIELD1_N_AGEONSET = 34
 FIELD1_N_DURATION = 35
 FIELD1_N_UPSITPCTL = 50
-FIELD1_N_MOCA = 51
-FIELD1_N_BJLOT = 52
-FIELD1_N_HVLT_DISCRIMINATION = 54
-FIELD1_N_SDMTOTAL = 63
-FIELD1_N_VLTANIM = 66
-FIELD1_N_MSEADLG = 69
-FIELD1_N_ESS = 79
-FIELD1_N_REM = 80
-FIELD1_N_STAI = 82
-FIELD1_N_SCOPA = 85
+FIELD1_N_MOCA = 52
+FIELD1_N_BJLOT = 53
+FIELD1_N_HVLT_DISCRIMINATION = 55
+FIELD1_N_SDMTOTAL = 64
+FIELD1_N_VLTANIM = 67
+FIELD1_N_MSEADLG = 70
+FIELD1_N_ESS = 80
+FIELD1_N_REM = 81
+FIELD1_N_STAI = 83
+FIELD1_N_SCOPA = 86
 FIELD1_N_NHY = 96
 FIELD1_N_UPDRS_TOT = 114
 FIELD1_N_TAU = 127
@@ -80,7 +80,7 @@ def write_header(f):
     print(add_virgolette("NHY"), file=f, end=FIELD_SEPARATOR)
     print(add_virgolette("UPDRS_tot"), file=f, end=FIELD_SEPARATOR)
     print(add_virgolette("TAU"), file=f, end=FIELD_SEPARATOR)
-    print(add_virgolette("PATNO2"), file=f, end=FIELD_SEPARATOR)
+    # print(add_virgolette("PATNO2"), file=f, end=FIELD_SEPARATOR)
     print(add_virgolette("RCT4"), file=f, end=FIELD_SEPARATOR)
     print(add_virgolette("CGT284"), file=f, end=FIELD_SEPARATOR)
     print(add_virgolette("RCT5"), file=f,end=FIELD_SEPARATOR)
@@ -141,9 +141,15 @@ def create_csv():
         print(patno)
 
         #################################
-        # other fields
+        # EVENT_ID
         #################################
         subgroup = row[FIELD1_N_SUBGROUP]
+        if subgroup != "Sporadic" and subgroup != "Healthy Control":
+            continue
+
+        #################################
+        # other fields
+        #################################
         age_at_visit = float(row[FIELD1_N_AGE_VISIT])
         if age_at_visit > 1000:
             age_at_visit = age_at_visit / 1000.0
@@ -342,7 +348,7 @@ def create_csv():
         # OUTPUT record second file
         #################################
         # print record
-        print(last_pat, end=FIELD_SEPARATOR, file=foutput)
+        #print(last_pat, end=FIELD_SEPARATOR, file=foutput)
         print(rct4, end=FIELD_SEPARATOR, file=foutput)
         print(cgt284, end=FIELD_SEPARATOR, file=foutput)
         print(rct5, end=FIELD_SEPARATOR, file=foutput)
