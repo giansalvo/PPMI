@@ -22,6 +22,8 @@ import datetime
 CSV_INPUT = 'work.keep.csv'
 CSV_INPUT = 'titanic.csv'
 
+FILE_LOG = 'log.txt'
+
 '''
 Recognize whether a column is numerical or categorical.
 :parameter
@@ -172,9 +174,9 @@ def main():
     Cramer(y, "Sex", dtf=dtf)
 
     ## split data
-    dtf_train, dtf_test = model_selection.train_test_split(dtf,
-                          test_size=0.3)
+    dtf_train, dtf_test = model_selection.train_test_split(dtf, test_size=0.3)
     ## print info
+
     print("X_train shape:", dtf_train.drop("Y",axis=1).shape, "| X_test shape:", dtf_test.drop("Y",axis=1).shape)
     print("y_train mean:", round(np.mean(dtf_train["Y"]),2), "| y_test mean:", round(np.mean(dtf_test["Y"]),2))
     print(dtf_train.shape[1], "features:", dtf_train.drop("Y",axis=1).columns.to_list())
@@ -318,7 +320,7 @@ def main():
     ##############################################################
     ## call model
     begin = datetime.datetime.now().replace(microsecond=0)
-    print("Start search: {}\n".format(begin))
+    print("Start search: {}\n".format(begin), file=open(FILE_LOG, 'a'), flush=True)
     model = ensemble.GradientBoostingClassifier()
     ## define hyperparameters combinations to try
     param_dic = {'learning_rate':[0.15,0.1,0.05,0.01,0.005,0.001],      #weighting factor for the corrections by new trees when added to the model
@@ -333,9 +335,9 @@ def main():
            scoring="accuracy").fit(X_train, y_train)
     end = datetime.datetime.now().replace(microsecond=0)
     search_time = end - begin
-    print("Search time: {}\n".format(search_time))
-    print("Best Model parameters:", random_search.best_params_)
-    print("Best Model mean accuracy:", random_search.best_score_)
+    print("Search time: {}\n".format(search_time), file=open(FILE_LOG, 'a'), flush=True)
+    print("Best Model parameters:", random_search.best_params_, file=open(FILE_LOG, 'a'), flush=True)
+    print("Best Model mean accuracy:", random_search.best_score_, file=open(FILE_LOG, 'a'), flush=True)
     model = random_search.best_estimator_
 
     ##########################################################
@@ -373,10 +375,10 @@ def main():
     ##########################################################
     ## train
     begin = datetime.datetime.now().replace(microsecond=0)
-    print("Start training: {}\n".format(begin))
+    print("Start training: {}\n".format(begin), file=open(FILE_LOG, 'a'), flush=True)
     model.fit(X_train, y_train)
     end = datetime.datetime.now().replace(microsecond=0)
-    print("Training time: {}\n".format(end - begin))
+    print("Training time: {}\n".format(end - begin), file=open(FILE_LOG, 'a'), flush=True)
     ## test
     predicted_prob = model.predict_proba(X_test)[:,1]
     predicted = model.predict(X_test)
@@ -387,16 +389,17 @@ def main():
     ## Accuray e AUC
     accuracy = metrics.accuracy_score(y_test, predicted)
     auc = metrics.roc_auc_score(y_test, predicted_prob)
-    print("Accuracy (overall correct predictions):", round(accuracy, 2))
-    print("Auc:", round(auc, 2))
+    print("Accuracy on testset (overall correct predictions):", round(accuracy, 2), file=open(FILE_LOG, 'a'), flush=True)
+    print("Auc on testset:", round(auc, 2), file=open(FILE_LOG, 'a'), flush=True)
 
     ## Precision e Recall
     recall = metrics.recall_score(y_test, predicted)
     precision = metrics.precision_score(y_test, predicted)
     print("Recall (all 1s predicted right):", round(recall, 2))
     print("Precision (confidence when predicting a 1):", round(precision, 2))
-    print("Detail:")
-    print(metrics.classification_report(y_test, predicted, target_names=[str(i) for i in np.unique(y_test)]))
+    print("Detail:", file=open(FILE_LOG, 'a'), flush=True)
+    print(metrics.classification_report(y_test, predicted, target_names=[str(i) for i in np.unique(y_test)]),
+          file=open(FILE_LOG, 'a'), flush=True)
 
     ####################################################
     # CONFUSION MATRIX on testset
@@ -485,10 +488,11 @@ def main():
     ############################################
     # Explainability
     ############################################
-    print("True:", y_test[4], "--> Pred:", predicted[4], "| Prob:", np.max(predicted_prob[4]))
+    print("True:", y_test[4], "--> Pred:", predicted[4], "| Prob:", np.max(predicted_prob[4]), file=open(FILE_LOG, 'a'), flush=True)
     explainer = lime_tabular.LimeTabularExplainer(training_data=X_train, feature_names=X_names, class_names=np.unique(y_train), mode="classification")
     explained = explainer.explain_instance(X_test[4], model.predict_proba, num_features=10)
-    print(explained.as_list())
+    print("Explain prediction: ", file=open(FILE_LOG, 'a'), flush=True)
+    print(explained.as_list(), file=open(FILE_LOG, 'a'), flush=True)
     explained.as_pyplot_figure()
     plt.savefig("explain.png")
     plt.close()
